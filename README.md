@@ -42,8 +42,20 @@ The following features have been added to the 4 terrestrial planets.
 
 # Requirements
 
-* Parallax Continued
+* [Parallax Continued](https://github.com/Gameslinx/Parallax-Continued/tree/master#readme)
 * [QuackPack](https://spacedock.info/mod/3136/QuackPack)
+
+
+# Recommended
+
+* [Deferred Rendering](https://github.com/LGhassen/Deferred)
+
+
+# Installation
+
+Make sure you have the two required mods, and their dependencies.
+
+* Unzip and place the contents of GameData into your KSP's GameData.
 
 
 # Changelog
