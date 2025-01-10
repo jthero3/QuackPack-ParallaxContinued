@@ -10,6 +10,21 @@ The following features have been added to the 4 terrestrial planets.
 * Adds Full Texture Support, including Ambient Occlusion.
 * Adds Full Scatter Support.
 
+# Bonus Features
+
+I've also included a few of the bonus features that I use in my current save.
+
+## Final Frontier:
+
+[Final Frontier](https://spacedock.info/mod/580/Final%20Frontier) awards your Kerbal with medals for their acts of bravery. From planetary flybys to planting flags. I created them with one of my other projects, [FinalFrontier Helper](https://github.com/jthero3/FinalFrontierHelper). All bodies are supported, for all medal types.
+
+All credit for Final Frontier goes to Nereid42 for creating this wonderful mod.
+
+## OrbitIconsPack:
+
+[Orbit Icons Pack](https://spacedock.info/mod/3769/OrbitIconsPack) gives each body a detail icon. I've bundled the Icons within this mod for ease of use, but those can be removed if you already have this mod installed.
+
+All credit for OrbitIconsPack goes to Space_Fox_Oprissmian for this amazing mod.
 
 # Gallery
 
