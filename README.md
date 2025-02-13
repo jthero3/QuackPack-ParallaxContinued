@@ -9,6 +9,7 @@ The following features have been added to the 4 terrestrial planets.
 
 * Adds Full Texture Support, including Ambient Occlusion.
 * Adds Full Scatter Support.
+* Adds Full ScaledSpace Support.
 
 # Bonus Features
 
@@ -74,6 +75,10 @@ Make sure you have the two required mods, and their dependencies.
 
 
 # Changelog
+
+0.2.0 - Scaled Space Support
+
+* Adds Full ScaledSpace Support for all bodies. Release 3 Required.
 
 0.1.0 - Initial Release
 * Adds Full Texture and Scatter Support. 
