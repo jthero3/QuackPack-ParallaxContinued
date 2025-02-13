@@ -27,6 +27,12 @@ All credit for Final Frontier goes to Nereid42 for creating this wonderful mod.
 
 All credit for OrbitIconsPack goes to Space_Fox_Oprissmian for this amazing mod.
 
+## Firefly:
+
+[Firefly](https://spacedock.info/mod/3813/Firefly) gives each of the 3 atmospheric bodies a custom reentry.
+
+All credit for Firefly goes to  MirageDev for this amazing mod.
+
 # Gallery
 
 
