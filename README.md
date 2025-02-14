@@ -40,9 +40,7 @@ All credit for Firefly goes to  MirageDev for this amazing mod.
 
 ![Blas Dunes](https://github.com/user-attachments/assets/7997c8b4-ce17-4b04-ba9e-bf34aade0e98)
 
-![Blas Continent](https://github.com/user-attachments/assets/8fb19656-bc53-4a45-b11e-151a8dea0ff6)
-
-![Blas Overlooking Dunes](https://github.com/user-attachments/assets/d42f0cb7-4aac-478b-9eb6-d798efeb4f22)
+![screenshot22](https://github.com/user-attachments/assets/9add3da2-8fd6-4c19-b178-a8a8ef504697)
 
 
 ## Geet:
@@ -59,7 +57,8 @@ All credit for Firefly goes to  MirageDev for this amazing mod.
 
 ![Cind Lava Shores](https://github.com/user-attachments/assets/f1e8a1a2-71c5-4435-ae32-1aae54f76905)
 
-![Cind Lava](https://github.com/user-attachments/assets/76b5ac81-67c1-46cb-9a98-15ab31dc8316)
+![screenshot27](https://github.com/user-attachments/assets/65150860-9e0b-4995-8f0e-83ee0355ee64)
+
 
 
 # Requirements
@@ -83,7 +82,6 @@ Make sure you have the two required mods, and their dependencies.
 # Changelog
 
 0.2.0 - Scaled Space Support
-
 * Adds Full ScaledSpace Support for all bodies. Release 3 Required.
 
 0.1.0 - Initial Release
