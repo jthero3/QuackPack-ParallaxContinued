@@ -81,6 +81,11 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
+0.4.0 - Scatter Update
+* Re-did Geet Scatters.
+* Cleaned up Scaled Space for Geet/Blas/Cind.
+* Touch-Ups on Subon.
+
 0.2.0 - Scaled Space Support
 * Adds Full ScaledSpace Support for all bodies. Release 3 Required.
 
