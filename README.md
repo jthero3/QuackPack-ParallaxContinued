@@ -81,6 +81,9 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
+0.4.1 - Sigma Rescale Fix
+* Added compatibility patch for sigma rescales.
+
 0.4.0 - Scatter Update
 * Re-did Geet Scatters.
 * Cleaned up Scaled Space for Geet/Blas/Cind.
