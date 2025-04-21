@@ -81,6 +81,8 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
+0.4.2 - Updated Atmo Configs
+
 0.4.1 - Sigma Rescale Fix
 * Added compatibility patch for sigma rescales.
 
