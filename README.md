@@ -81,6 +81,9 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
+0.4.3 - VertexColorMapEmissive Fix
+* Removed Mod from Ocean, and Scaled Sections. 
+
 0.4.2 - Updated Atmo Configs
 
 0.4.1 - Sigma Rescale Fix
