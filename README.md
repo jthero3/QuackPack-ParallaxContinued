@@ -81,15 +81,19 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
-0.4.3 - VertexColorMapEmissive Fix
+0.3.4 - Maps Fix
+* Re-added materials node required for map previews.
+* Created Release Pipeline.
+
+0.3.3 - VertexColorMapEmissive Fix
 * Removed Mod from Ocean, and Scaled Sections. 
 
-0.4.2 - Updated Atmo Configs
+0.3.2 - Updated Atmo Configs
 
-0.4.1 - Sigma Rescale Fix
+0.3.1 - Sigma Rescale Fix
 * Added compatibility patch for sigma rescales.
 
-0.4.0 - Scatter Update
+0.3.0 - Scatter Update
 * Re-did Geet Scatters.
 * Cleaned up Scaled Space for Geet/Blas/Cind.
 * Touch-Ups on Subon.
