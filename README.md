@@ -107,4 +107,4 @@ Make sure you have the two required mods, and their dependencies.
 
 # Licensing
 
-This Mod Is Distributed under [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Configs in this mod are Distributed under [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/). Textures are All Rights Reserved.
