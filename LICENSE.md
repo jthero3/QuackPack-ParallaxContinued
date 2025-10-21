@@ -1,4 +1,4 @@
-This Mod Is Distributed under [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+Configs in this Mod Is Distributed under [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/). With Textures distributed as ARR.
 
 By the terms:
 
