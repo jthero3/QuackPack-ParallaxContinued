@@ -81,6 +81,10 @@ Make sure you have the two required mods, and their dependencies.
 
 # Changelog
 
+0.5.0 - KSPTextureLoader Support
+* All textures have been moved into asset bundles. Reducing file sizes by over half.
+* Added a version file to install.
+
 0.3.4 - Maps Fix
 * Re-added materials node required for map previews.
 * Created Release Pipeline.
