@@ -1,0 +1,27 @@
+identifier: QuackPack-ParallaxContinued
+name: QuackPack-ParallaxContinued
+$kref: '#/ckan/github/jthero3/QuackPack-ParallaxContinued'
+$vref: '#/ckan/ksp-avc'
+abstract: Parallax Continued Support for QuackPack 
+resources:
+  license: MIT
+  repository: https://github.com/jthero3/QuackPack-ParallaxContinued
+tags:
+  - config
+  - library
+depends:
+  - name: ModuleManager
+  - name: Kopernicus
+  - name: VertexMitchellNetravaliHeightMap
+  - name: VertexHeightOblateAdvanced
+  - name: ParallaxContinued
+supports:
+  - name: OPM
+  - name: MPE
+install:
+  - find: QuackPack-ParallaxContinued
+    install_to: GameData
+  - find: Nereid
+    install_to: GameData
+  - find: FireQuack
+    install_to: GameData
