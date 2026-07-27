@@ -1,0 +1,21 @@
+name: create-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-string:
+        description: "major.minor.patch[.build], or --major / --minor / --patch to bump from CHANGELOG.md"
+        type: string
+        required: true
+
+jobs:
+  create-release:
+    permissions:
+      contents: write
+    uses: KSPModdingLibs/KSPBuildTools/.github/workflows/create-release.yml@1.1.1
+    with:
+      version-string: ${{ inputs.version-string }}
+      use-msbuild: false
+      artifacts: GameData Bonus LICENSE* README* CHANGELOG*
+      changelog-input-file: CHANGELOG.md
+      changelog-output-file: GameData/QuackPack-ParallaxContinued/changelog.cfg

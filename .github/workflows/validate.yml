@@ -1,12 +1,10 @@
-
 name: validate
 
 on:
+  pull_request:
   push:
-  workflow_dispatch:
+    branches: [ "main" ]
 
 jobs:
-  release:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: KSPModdingLibs/KSPBuildTools/.github/workflows/validate.yml@1.1.1
+  validate:
+    uses: KSPModdingLibs/KSPBuildTools/.github/workflows/validate.yml@1.1.1
