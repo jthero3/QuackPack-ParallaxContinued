@@ -1,0 +1,12 @@
+
+name: validate
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: KSPModdingLibs/KSPBuildTools/.github/workflows/validate.yml@1.1.1

@@ -22,7 +22,7 @@ jobs:
 
       - name: Package repository
         run: |
-          zip -r QuackPack-ParallaxContinued_${{ env.VERSION }}.zip . -x '*.git*' -x '*.github*'
+          zip -r QuackPack-ParallaxContinued_${{ env.VERSION }}.zip . -x '*.git*' -x '*.github*' -x 'Textures/*'
 
       - name: Create and push tag
         run: |
