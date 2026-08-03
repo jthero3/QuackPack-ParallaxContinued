@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        body: [blas, cind, geet, subon]
+        body: [Blas, Cind, Geet, Subon]
 
     steps:
       - uses: actions/checkout@v4
