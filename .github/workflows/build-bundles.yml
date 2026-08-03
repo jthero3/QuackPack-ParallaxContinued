@@ -1,0 +1,96 @@
+name: Build asset bundles
+
+on:
+  push:
+    tags: ['v*']
+    branches: [main, dev]
+    paths: &texture-paths
+      - 'Textures/**'
+      - 'texture-properties.yaml'
+      - '.github/workflows/build-bundles.yml'
+  pull_request:
+    paths: *texture-paths
+  workflow_dispatch:
+
+concurrency:
+  group: bundles-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  KTU_VERSION: v1.0.36
+  SRC_DIR: Textures
+  OUT_DIR: GameData/QuackPack-ParallaxContinued/Textures
+  BUNDLE_PREFIX: QuackPack-ParallaxContinued/Textures
+
+jobs:
+  bundles:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        body: [blas, cind, geet, subon]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache ksp-texture-util
+        id: ktu-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/ktu
+          key: ktu-${{ env.KTU_VERSION }}-linux-x64
+
+      - name: Install ksp-texture-util
+        if: steps.ktu-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$KTU_VERSION" \
+            --repo Phantomical/KSPTextureLoader \
+            --pattern 'ksp-texture-util-linux-x64.zip' \
+            --dir "$RUNNER_TEMP"
+          unzip -q "$RUNNER_TEMP/ksp-texture-util-linux-x64.zip" -d "$RUNNER_TEMP/ktu"
+
+      - name: Add ksp-texture-util to PATH
+        run: |
+          # The release zip loses the unix exec bit; restore it.
+          chmod +x "$RUNNER_TEMP/ktu/ksp-texture-util"
+          echo "$RUNNER_TEMP/ktu" >> "$GITHUB_PATH"
+
+      - name: Build bundle for ${{ matrix.body }}
+        run: |
+          mkdir -p "$OUT_DIR"
+          # --properties is optional; only pass it if the file actually exists,
+          # since ksp-texture-util errors out on a missing properties path.
+          props=()
+          if [ -f texture-properties.yaml ]; then
+            props=(--properties texture-properties.yaml)
+          fi
+          ksp-texture-util bundle "$SRC_DIR/${{ matrix.body }}" \
+            --prefix "$BUNDLE_PREFIX/${{ matrix.body }}" \
+            "${props[@]}" \
+            -o "$OUT_DIR/quackpack_parallax-${{ matrix.body }}.unity3d"
+
+      - name: Validate bundle
+        run: |
+          ksp-texture-util dev validate \
+            "$OUT_DIR/quackpack_parallax-${{ matrix.body }}.unity3d" \
+            "$SRC_DIR/${{ matrix.body }}" \
+            --prefix "$BUNDLE_PREFIX/${{ matrix.body }}"
+
+      - name: Upload bundle artifact
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: actions/upload-artifact@v4
+        with:
+          name: quackpack_parallax-${{ matrix.body }}
+          path: ${{ env.OUT_DIR }}/quackpack_parallax-${{ matrix.body }}.unity3d
+          retention-days: 5
+          compression-level: 0
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.OUT_DIR }}/quackpack_parallax-${{ matrix.body }}.unity3d
