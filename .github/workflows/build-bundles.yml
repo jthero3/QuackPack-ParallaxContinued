@@ -3,13 +3,11 @@ name: Build asset bundles
 on:
   push:
     tags: ['v*']
-    branches: [main, dev]
-    paths: &texture-paths
+  pull_request:
+    paths:
       - 'Textures/**'
       - 'texture-properties.yaml'
       - '.github/workflows/build-bundles.yml'
-  pull_request:
-    paths: *texture-paths
   workflow_dispatch:
 
 concurrency:
@@ -55,20 +53,17 @@ jobs:
 
       - name: Add ksp-texture-util to PATH
         run: |
-          # The release zip loses the unix exec bit; restore it.
           chmod +x "$RUNNER_TEMP/ktu/ksp-texture-util"
           echo "$RUNNER_TEMP/ktu" >> "$GITHUB_PATH"
 
       - name: Build bundle for ${{ matrix.body }}
         run: |
           mkdir -p "$OUT_DIR"
-          # --properties is optional; only pass it if the file actually exists,
-          # since ksp-texture-util errors out on a missing properties path.
           props=()
           if [ -f texture-properties.yaml ]; then
             props=(--properties texture-properties.yaml)
           fi
-          ksp-texture-util bundle "$SRC_DIR/${{ matrix.body }}" \
+          ksp-texture-util build "$SRC_DIR/${{ matrix.body }}" \
             --prefix "$BUNDLE_PREFIX/${{ matrix.body }}" \
             "${props[@]}" \
             -o "$OUT_DIR/quackpack_parallax-${{ matrix.body }}.unity3d"
