@@ -2,7 +2,7 @@ name: Build asset bundles
 
 on:
   push:
-    tags: ['v*']
+    tags: ['*.*.*']
   pull_request:
     paths:
       - 'Textures/**'
