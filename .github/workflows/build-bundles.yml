@@ -66,12 +66,12 @@ jobs:
           ksp-texture-util build "$SRC_DIR/${{ matrix.body }}" \
             --prefix "$BUNDLE_PREFIX/${{ matrix.body }}" \
             "${props[@]}" \
-            -o "$OUT_DIR/quackpack_parallax-${{ matrix.body }}.unity3d"
+            -o "$OUT_DIR/quackpack_parallax-${{ toLower(matrix.body) }}.unity3d"
 
       - name: Validate bundle
         run: |
           ksp-texture-util dev validate \
-            "$OUT_DIR/quackpack_parallax-${{ matrix.body }}.unity3d" \
+            "$OUT_DIR/quackpack_parallax-${{ toLower(matrix.body) }}.unity3d" \
             "$SRC_DIR/${{ matrix.body }}" \
             --prefix "$BUNDLE_PREFIX/${{ matrix.body }}"
 
