@@ -1,0 +1,178 @@
+name: create-release
+
+# Replaces the KSPBuildTools reusable create-release workflow with its underlying
+# composite actions, so asset bundles can be built into GameData/ BEFORE
+# assemble-release zips it. The reusable workflow gave no place to inject that step,
+# which is why the bundles were missing from the release zip.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-string:
+        description: "major.minor.patch[.build], or --major / --minor / --patch to bump from CHANGELOG.md"
+        type: string
+        required: true
+
+env:
+  # `build` is the verb at v1.0.36; renamed to `bundle` on main after that tag.
+  KTU_VERSION: v1.0.36
+  SRC_DIR: Textures
+  OUT_DIR: GameData/QuackPack-ParallaxContinued/Textures
+  BUNDLE_PREFIX: QuackPack-ParallaxContinued/Textures
+  # Capitalised to match the prefixes in _Configs/KSPTextureLoader_QP.cfg.
+  # NOT including `scatters`: its prefix is _Scatters/Objects and its source
+  # textures are not in this repo, so that bundle stays a tracked file.
+  BODIES: "Base Blas Cind Geet Subon"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # update-version calls `python -m pip`; don't rely on the runner image alias.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # ---------------------------------------------------------------- bundles
+
+      - name: Cache ksp-texture-util
+        id: ktu-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/ktu
+          key: ktu-${{ env.KTU_VERSION }}-linux-x64
+
+      - name: Install ksp-texture-util
+        if: steps.ktu-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$KTU_VERSION" \
+            --repo Phantomical/KSPTextureLoader \
+            --pattern 'ksp-texture-util-linux-x64.zip' \
+            --dir "$RUNNER_TEMP"
+          unzip -q "$RUNNER_TEMP/ksp-texture-util-linux-x64.zip" -d "$RUNNER_TEMP/ktu"
+
+      - name: Add ksp-texture-util to PATH
+        run: |
+          chmod +x "$RUNNER_TEMP/ktu/ksp-texture-util"
+          echo "$RUNNER_TEMP/ktu" >> "$GITHUB_PATH"
+
+      - name: Assert CLI shape
+        run: |
+          ksp-texture-util --help | grep -qE '^[[:space:]]+build\b' || {
+            echo "::error::ksp-texture-util $KTU_VERSION has no 'build' verb - CLI changed"
+            exit 1
+          }
+
+      - name: Build asset bundles
+        run: |
+          mkdir -p "$OUT_DIR"
+          props=()
+          if [ -f texture-properties.yaml ]; then
+            props=(--properties texture-properties.yaml)
+          fi
+
+          for body in $BODIES; do
+            src="$SRC_DIR/$body"
+            if [ ! -d "$src" ]; then
+              echo "::error::source directory $src does not exist"
+              exit 1
+            fi
+            lower=$(echo "$body" | tr '[:upper:]' '[:lower:]')
+            echo "::group::$body"
+            ksp-texture-util build "$src" \
+              --prefix "$BUNDLE_PREFIX/$body" \
+              "${props[@]}" \
+              -o "$OUT_DIR/quackpack_parallax-$lower.unity3d"
+            echo "::endgroup::"
+          done
+
+      - name: Validate asset bundles
+        run: |
+          for body in $BODIES; do
+            lower=$(echo "$body" | tr '[:upper:]' '[:lower:]')
+            ksp-texture-util dev validate \
+              "$OUT_DIR/quackpack_parallax-$lower.unity3d" \
+              "$SRC_DIR/$body" \
+              --prefix "$BUNDLE_PREFIX/$body"
+          done
+
+      # Cross-check against the manifest so a bundle can never silently go missing
+      # from the zip - including quackpack_parallax-scatters, which is not rebuilt.
+      - name: Verify every declared bundle is present
+        run: |
+          manifest=GameData/QuackPack-ParallaxContinued/_Configs/KSPTextureLoader_QP.cfg
+          missing=0
+          while read -r rel; do
+            [ -z "$rel" ] && continue
+            if [ ! -s "GameData/$rel" ]; then
+              echo "::error::$manifest declares $rel but it is missing or empty"
+              missing=1
+            else
+              printf '  ok  %-70s %s bytes\n' "$rel" "$(stat -c%s "GameData/$rel")"
+            fi
+          done < <(grep -oP '^\s*bundle\s*=\s*\K\S+' "$manifest")
+          exit $missing
+
+      # ---------------------------------------------------------------- release
+
+      - name: update-version
+        id: version
+        uses: KSPModdingLibs/KSPBuildTools/.github/actions/update-version@1.1.1
+        with:
+          version-string: ${{ inputs.version-string }}
+          changelog-input-file: CHANGELOG.md
+          changelog-output-file: GameData/QuackPack-ParallaxContinued/changelog.cfg
+
+      # update-version stages the changelog files but does not commit. The built
+      # bundles are untracked/ignored, so they are not swept into this commit -
+      # they only need to exist on disk for assemble-release.
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit --allow-empty -m "bump version to $VERSION_STRING"
+          git tag -f -a "$VERSION_STRING" -m "$VERSION_STRING"
+          git push --follow-tags origin HEAD:${{ github.ref_name }}
+
+      - name: assemble-release
+        id: assemble-release
+        uses: KSPModdingLibs/KSPBuildTools/.github/actions/assemble-release@1.1.1
+        with:
+          artifacts: GameData Bonus LICENSE* README* CHANGELOG*
+          output-file-name: ${{ github.event.repository.name }}-${{ env.VERSION_STRING }}
+
+      # Fail loudly rather than shipping a zip with no bundles in it.
+      - name: Assert bundles made it into the zip
+        run: |
+          zip="${{ steps.assemble-release.outputs.artifact-zip-path }}"
+          count=$(unzip -Z1 "$zip" | grep -ci '\.unity3d$' || true)
+          echo "bundles in zip: $count"
+          unzip -Z1 "$zip" | grep -i '\.unity3d$' || true
+          if [ "$count" -lt 6 ]; then
+            echo "::error::expected 6 .unity3d files in the release zip, found $count"
+            exit 1
+          fi
+
+      - name: create-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$VERSION_STRING" \
+            --draft \
+            --title "$VERSION_STRING" \
+            --notes-file "$RELEASE_NOTES_FILE" \
+            "${{ steps.assemble-release.outputs.artifact-zip-path }}"
