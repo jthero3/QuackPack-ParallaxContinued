@@ -5,13 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## 0.5.2 - 2026-08-03
+
+There is nothing permanent except change
 
 ### Added
 
 - Updated Pipelines with KSPBuildTools
 - Fixed gloss map portion of the terrain textures.
 - Updated asset bundles.
+
 
 ## [0.5.0]
 
@@ -39,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* VertexColorMapEmissive Fix: Removed Mod from Ocean, and Scaled Sections. 
+* VertexColorMapEmissive Fix: Removed Mod from Ocean, and Scaled Sections.
 
 
 ## [0.3.2]
@@ -76,4 +79,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Adds Full Texture and Scatter Support. 
+- Adds Full Texture and Scatter Support.
